@@ -1,0 +1,127 @@
+MOV-Only Compiler Development Plan
+
+Current Status (as of 2024-12-18):
+1. Core Infrastructure:
+   [x] Basic target machine setup
+   [x] Register info infrastructure
+   [x] Instruction info infrastructure
+   [x] Subtarget support structure
+   [x] Basic MOV operations
+   [ ] Frame handling implementation
+   [ ] ABI implementations
+
+2. MOV Implementation Status:
+   [x] Basic MOV instruction definitions
+   [x] Register-to-register MOV
+   [x] Immediate-to-register MOV
+   [x] Memory operations
+   [ ] Conditional operations
+   [ ] Frame setup/teardown sequences
+
+3. Code Organization:
+   [x] Header files properly structured
+   [x] Implementation files created
+   [x] Helper functions declared
+   [x] TableGen definitions organized
+   [ ] Build system fully configured
+
+Priority Tasks:
+1. HIGH - Complete Core Operations
+   - [x] Implement register-to-register MOV
+   - [x] Implement immediate-to-register MOV
+   - [x] Add memory operation support
+   - [x] Implement bit manipulation operations
+   - [ ] Test basic MOV sequences
+
+2. MEDIUM - Control Flow
+   - [ ] Implement conditional operations
+   - [ ] Add branch support using MOV
+   - [ ] Test control flow sequences
+   - [ ] Verify instruction selection
+
+3. LOW - ABI and Frame Management
+   - [ ] Complete frame setup/teardown
+   - [ ] Implement platform-specific ABIs
+   - [ ] Test function calls
+   - [ ] Verify stack operations
+
+Next Steps:
+1. Complete Control Flow Support:
+   - Implement conditional branch sequences
+   - Add comparison operations
+   - Test control flow
+   - Verify branch patterns
+
+2. Add Frame Management:
+   - Implement frame setup/teardown
+   - Add stack pointer management
+   - Support function calls
+   - Test frame operations
+
+Progress:
+[x] Basic target setup complete
+[x] Register classes defined
+[x] Instruction info structure ready
+[x] Subtarget support added
+[x] TableGen definitions organized
+[x] Basic MOV operations implemented
+[x] Bit manipulation operations implemented
+[ ] Control flow working
+[ ] Frame management complete
+[ ] ABI support finished
+
+Implementation Notes:
+1. All member functions are const-correct
+2. Helper functions organized in protected section
+3. Stub implementations in place for future work
+4. Frame allocation support added via allocateTempMem
+5. TableGen files properly organized with clear dependency chain:
+   - MovsucatorBase.td: Common definitions and base classes
+   - MovsucatorRegisterInfo.td: Register definitions
+   - MovsucatorInstrFormats.td: Instruction format classes
+   - MovsucatorInstrInfo.td: Instruction definitions
+
+Crucial Design Decisions:
+1. TableGen Organization:
+   - Using MovsucatorBase.td as foundation for all target definitions
+   - Clear dependency chain from base to specific implementations
+   - Follows LLVM best practices for target definition
+
+2. Instruction Implementation:
+   - All operations implemented using only MOV instructions
+   - Complex operations broken down into MOV sequences:
+     * Addition using bit-by-bit operations
+     * Shifts using conditional MOVs
+     * Logical operations using bit manipulation
+   - Conditional operations use MOV for control flow
+
+3. Register Management:
+   - Dedicated registers for specific purposes (e.g., SP for stack)
+   - Register classes organized by usage (GPR, SPR, PTR)
+   - Callee-saved registers defined for ABI compliance
+
+4. Bit Manipulation Strategy:
+   - All bit operations implemented using MOV sequences
+   - Each operation works on individual bits
+   - Uses temporary registers for intermediate results
+   - Avoids direct bit manipulation instructions
+
+Build Status:
+- CMake configuration in place
+- Basic build infrastructure ready
+- Current focus on implementing control flow
+- Need to complete TableGen definitions
+
+Testing Plan:
+1. Unit Tests:
+   - Basic MOV operations
+   - Register allocation
+   - Memory operations
+   - Bit manipulation operations
+   - Control flow sequences
+
+2. Integration Tests:
+   - Function calls
+   - Stack operations
+   - ABI compliance
+   - Full programs

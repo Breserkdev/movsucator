@@ -1,0 +1,36 @@
+# Build directories
+build/
+llvm-project/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CMake files
+CMakeCache.txt
+CMakeFiles/
+*.cmake
+!CMakeLists.txt
+
+# Compiled files
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Generated files
+*.inc
+*.gen
+
+# OS specific
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
