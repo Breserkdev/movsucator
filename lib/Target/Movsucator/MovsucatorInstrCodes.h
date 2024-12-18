@@ -3,12 +3,7 @@
 
 namespace llvm {
 namespace Movsucator {
-  enum {
-    MOV_rr = 0,  // Register-to-Register MOV
-    MOVi,        // Immediate-to-Register MOV
-    MOV_load,    // Memory Load
-    MOV_store,   // Memory Store
-  };
+// Instruction codes are auto-generated in MovsucatorGenInstrInfo.inc
 } // end namespace Movsucator
 } // end namespace llvm
 

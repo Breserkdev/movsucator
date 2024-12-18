@@ -1,19 +1,28 @@
 #include "MovsucatorTargetMachine.h"
-#include "MovsucatorSubtarget.h"
+#include "TargetInfo/MovsucatorTargetInfo.h"
+#include "llvm/CodeGen/TargetPassConfig.h"
 #include "llvm/MC/TargetRegistry.h"
+#include "llvm/Support/CodeGen.h"
 #include "llvm/Target/TargetLoweringObjectFile.h"
-#include "llvm/Target/TargetMachine.h"
-#include <memory>
+#include "llvm/Target/TargetOptions.h"
 
 using namespace llvm;
 
 Target llvm::TheMovsucatorTarget;
 
 namespace {
-class MovsucatorTargetObjectFile : public TargetLoweringObjectFile {
+class MovsucatorTargetObjectFile : public TargetLoweringObjectFileELF {
 public:
-  void Initialize(MCContext &Ctx, const TargetMachine &TM) override {
-    TargetLoweringObjectFile::Initialize(Ctx, TM);
+  MovsucatorTargetObjectFile() : TargetLoweringObjectFileELF() {}
+
+  MCSection *SelectSectionForGlobal(const GlobalObject *GO, SectionKind Kind,
+                                  const TargetMachine &TM) const override {
+    return TargetLoweringObjectFileELF::SelectSectionForGlobal(GO, Kind, TM);
+  }
+
+  MCSection *getExplicitSectionGlobal(const GlobalObject *GO, SectionKind Kind,
+                                    const TargetMachine &TM) const override {
+    return TargetLoweringObjectFileELF::getExplicitSectionGlobal(GO, Kind, TM);
   }
 };
 } // end anonymous namespace
@@ -34,6 +43,10 @@ MovsucatorTargetMachine::getSubtargetImpl(const Function &F) const {
   return nullptr; // We'll implement this later
 }
 
+TargetPassConfig *MovsucatorTargetMachine::createPassConfig(PassManagerBase &PM) {
+  return new TargetPassConfig(*this, PM);
+}
+
 extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeMovsucatorTarget() {
-  RegisterTargetMachine<MovsucatorTargetMachine> X(TheMovsucatorTarget);
+  RegisterTargetMachine<MovsucatorTargetMachine> X(getTheMovsucatorTarget());
 }

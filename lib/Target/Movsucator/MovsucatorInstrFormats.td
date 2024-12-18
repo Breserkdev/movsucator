@@ -9,6 +9,8 @@ class MovsucatorInst<dag outs, dag ins, string asmstr, list<dag> pattern>
   dag InOperandList = ins;
   let AsmString = asmstr;
   let Pattern = pattern;
+  let Itinerary = NoItinerary;
+  let SchedRW = [];
 }
 
 // Format for MOV instructions

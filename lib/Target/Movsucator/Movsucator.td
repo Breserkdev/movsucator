@@ -1,31 +1,29 @@
-//===-- Movsucator.td - Main target description --*- tablegen -*-===//
+//===-- Movsucator.td - Describe the Movsucator Target Machine -*- tablegen -*-===//
 
-// Include the common target definitions
+//===----------------------------------------------------------------------===//
+// Target-independent interfaces
+//===----------------------------------------------------------------------===//
+
 include "llvm/Target/Target.td"
 
-// Include our instruction definitions
+//===----------------------------------------------------------------------===//
+// Registers, calling conventions, instruction descriptions.
+//===----------------------------------------------------------------------===//
+
+include "llvm/Target/RegisterInfo.td"
+include "llvm/Target/InstrInfo.td"
+
+//===----------------------------------------------------------------------===//
+// Register definitions
+//===----------------------------------------------------------------------===//
+
+include "MovsucatorRegisterInfo.td"
+
+//===----------------------------------------------------------------------===//
+// Instruction definitions
+//===----------------------------------------------------------------------===//
+
 include "MovsucatorInstrInfo.td"
-
-//===----------------------------------------------------------------------===//
-// Register File Description
-//===----------------------------------------------------------------------===//
-
-// Define register class name
-let Namespace = "Movsucator" in {
-  // Basic register class
-  class MovsucatorReg<string n> : Register<n> {
-    let HWEncoding{3-0} = 0;
-  }
-}
-
-// Define the four registers as per the paper
-def A : MovsucatorReg<"a">;
-def B : MovsucatorReg<"b">;
-def C : MovsucatorReg<"c">;
-def S : MovsucatorReg<"s">; // Changed D to S to match paper
-
-// Register class for general purpose registers
-def GPR : RegisterClass<"Movsucator", [i32], 32, (add A, B, C, S)>;
 
 //===----------------------------------------------------------------------===//
 // Target-Specific Information
@@ -38,14 +36,6 @@ def MovsucatorAsmWriter : AsmWriter {
 }
 
 //===----------------------------------------------------------------------===//
-// Calling Convention Definition
-//===----------------------------------------------------------------------===//
-
-def CC_Movsucator : CallingConv<[
-  CCIfType<[i32], CCAssignToReg<[A, B, C, S]>>
-]>;
-
-//===----------------------------------------------------------------------===//
 // Processor Features and Models
 //===----------------------------------------------------------------------===//
 
@@ -55,11 +45,25 @@ def FeatureMov : SubtargetFeature<
     "true",
     "Target supports MOV instruction">;
 
-def MovsucatorModel : SchedMachineModel {
+// Scheduling definitions
+def MovsucatorSchedModel : SchedMachineModel {
   let CompleteModel = 0;
+  let IssueWidth = 1;  // Single instruction issue
+  let LoadLatency = 1; // One cycle latency for loads
+  let MispredictPenalty = 0; // No branch prediction
 }
 
-def : ProcessorModel<"movsucator", MovsucatorModel, [FeatureMov]>;
+// Define functional units
+def ALU : FuncUnit;
+
+// Define instruction itineraries
+def IIC_MOV : InstrItinClass;
+
+def MovsucatorItineraries : ProcessorItineraries<[ALU], [], [
+  InstrItinData<IIC_MOV, [InstrStage<1, [ALU]>]>
+]>;
+
+def : ProcessorModel<"movsucator", MovsucatorSchedModel, [FeatureMov]>;
 
 //===----------------------------------------------------------------------===//
 // Target Declaration
