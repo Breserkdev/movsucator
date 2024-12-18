@@ -1,10 +1,12 @@
 #include "MovsucatorMCAsmInfo.h"
-#include "llvm/ADT/Triple.h"
+#include "llvm/TargetParser/Triple.h"
 
 using namespace llvm;
 
-MovsucatorMCAsmInfo::MovsucatorMCAsmInfo(const Triple &TT,
-                                     const MCTargetOptions &Options) {
-  CommentString = "//";
-  SupportsDebugInformation = true;
+void MovsucatorMCAsmInfo::anchor() { }
+
+MovsucatorMCAsmInfo::MovsucatorMCAsmInfo(const Triple &TT) {
+  IsLittleEndian = true;
+  PointerSize = 4;
+  CalleeSaveStackSlotSize = 4;
 }

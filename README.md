@@ -44,28 +44,29 @@ movsucator/
 ├── lib/
 │   └── Target/
 │       └── Movsucator/    # Movsucator backend implementation
+│           ├── MCTargetDesc/      # Machine code description
+│           ├── TargetInfo/        # Target information
+│           └── ...               # Other target-specific files
 ├── include/               # Public headers
 ├── test/                 # Test files
 └── docs/                 # Documentation
 ```
 
-## Implementation Details
-The compiler implements the following key components:
-- Register allocation using 4 general-purpose registers (A, B, C, S)
-- MOV instruction variants (register-to-register, immediate-to-register, memory operations)
-- Basic calling convention
-- Frame management
-- Instruction selection patterns
+## Current Status
+- ✅ Basic target infrastructure setup
+- ✅ Register definitions and classes
+- ✅ Basic MOV instruction definitions
+- ✅ Memory operations support
+- ⚠️ Frame management (in progress)
+- ⚠️ ABI implementation (in progress)
+- ⚠️ Conditional operations (planned)
 
 ## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
-- Based on the paper "Mov Is Turing-Complete" by Stephen Dolan
-- Built using the LLVM compiler infrastructure
-
-## Status
-See [current_status.md](current_status.md) for detailed project status and upcoming features.
+- LLVM Team for the excellent compiler infrastructure
+- Stephen Dolan for the proof that MOV is Turing-complete

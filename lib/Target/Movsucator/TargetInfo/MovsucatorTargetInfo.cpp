@@ -2,6 +2,7 @@
 
 #include "TargetInfo/MovsucatorTargetInfo.h"
 #include "llvm/MC/TargetRegistry.h"
+#include "llvm/TargetParser/Triple.h"
 
 using namespace llvm;
 
@@ -11,6 +12,6 @@ Target &llvm::getTheMovsucatorTarget() {
 }
 
 extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeMovsucatorTargetInfo() {
-  RegisterTarget<Triple::movsucator> X(getTheMovsucatorTarget(), "movsucator",
+  RegisterTarget<Triple::UnknownArch> X(getTheMovsucatorTarget(), "movsucator",
                                     "Movsucator", "Movsucator");
 }

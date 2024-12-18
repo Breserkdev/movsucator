@@ -7,7 +7,8 @@
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/Support/TargetRegistry.h"
+#include "llvm/MC/TargetRegistry.h"
+#include "llvm/TargetParser/Triple.h"
 
 using namespace llvm;
 
@@ -20,34 +21,36 @@ using namespace llvm;
 #define GET_REGINFO_MC_DESC
 #include "MovsucatorGenRegisterInfo.inc"
 
-static MCInstrInfo *createMovsucatorMCInstrInfo() {
+MCInstrInfo *createMovsucatorMCInstrInfo() {
   MCInstrInfo *X = new MCInstrInfo();
   InitMovsucatorMCInstrInfo(X);
   return X;
 }
 
-static MCRegisterInfo *createMovsucatorMCRegisterInfo(const Triple &TT) {
+MCRegisterInfo *createMovsucatorMCRegisterInfo(const Triple &TT) {
   MCRegisterInfo *X = new MCRegisterInfo();
-  InitMovsucatorMCRegisterInfo(X, Movsucator::A_Reg);
+  InitMovsucatorMCRegisterInfo(X, 0);
   return X;
 }
 
-static MCSubtargetInfo *createMovsucatorMCSubtargetInfo(const Triple &TT,
-                                                       StringRef CPU,
-                                                       StringRef FS) {
-  return createMovsucatorMCSubtargetInfoImpl(TT, CPU, FS);
+MCSubtargetInfo *createMovsucatorMCSubtargetInfo(const Triple &TT, StringRef CPU,
+                                              StringRef FS) {
+  return createMovsucatorMCSubtargetInfoImpl(TT, CPU, /*TuneCPU*/ CPU, FS);
 }
 
 extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeMovsucatorTargetMC() {
+  // Register the MC asm info.
+  RegisterMCAsmInfo<MovsucatorMCAsmInfo> X(getTheMovsucatorTarget());
+
   // Register the MC instruction info.
   TargetRegistry::RegisterMCInstrInfo(getTheMovsucatorTarget(),
-                                     createMovsucatorMCInstrInfo);
+                                    createMovsucatorMCInstrInfo);
 
   // Register the MC register info.
   TargetRegistry::RegisterMCRegInfo(getTheMovsucatorTarget(),
-                                   createMovsucatorMCRegisterInfo);
+                                  createMovsucatorMCRegisterInfo);
 
   // Register the MC subtarget info.
   TargetRegistry::RegisterMCSubtargetInfo(getTheMovsucatorTarget(),
-                                         createMovsucatorMCSubtargetInfo);
+                                       createMovsucatorMCSubtargetInfo);
 }
