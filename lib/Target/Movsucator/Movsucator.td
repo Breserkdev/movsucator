@@ -3,6 +3,9 @@
 // Include the common target definitions
 include "llvm/Target/Target.td"
 
+// Include our instruction definitions
+include "MovsucatorInstrInfo.td"
+
 //===----------------------------------------------------------------------===//
 // Register File Description
 //===----------------------------------------------------------------------===//
@@ -23,20 +26,6 @@ def S : MovsucatorReg<"s">; // Changed D to S to match paper
 
 // Register class for general purpose registers
 def GPR : RegisterClass<"Movsucator", [i32], 32, (add A, B, C, S)>;
-
-//===----------------------------------------------------------------------===//
-// Instruction Formats
-//===----------------------------------------------------------------------===//
-
-class MovsucatorInst<dag outs, dag ins, string asmstr, list<dag> pattern>
-    : Instruction {
-  field bits<32> Inst;
-  let Namespace = "Movsucator";
-  dag OutOperandList = outs;
-  dag InOperandList = ins;
-  let AsmString = asmstr;
-  let Pattern = pattern;
-}
 
 //===----------------------------------------------------------------------===//
 // Target-Specific Information
@@ -66,7 +55,9 @@ def FeatureMov : SubtargetFeature<
     "true",
     "Target supports MOV instruction">;
 
-def MovsucatorModel : SchedMachineModel;
+def MovsucatorModel : SchedMachineModel {
+  let CompleteModel = 0;
+}
 
 def : ProcessorModel<"movsucator", MovsucatorModel, [FeatureMov]>;
 

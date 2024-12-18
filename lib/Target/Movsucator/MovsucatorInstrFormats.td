@@ -1,35 +1,19 @@
 //===-- MovsucatorInstrFormats.td - Instruction formats -*- tablegen -*-===//
 
+// Base class for all Movsucator instructions
+class MovsucatorInst<dag outs, dag ins, string asmstr, list<dag> pattern>
+    : Instruction {
+  field bits<32> Inst;
+  let Namespace = "Movsucator";
+  dag OutOperandList = outs;
+  dag InOperandList = ins;
+  let AsmString = asmstr;
+  let Pattern = pattern;
+}
+
 // Format for MOV instructions
 class MovFormat<bits<6> opcode, dag outs, dag ins, string asmstr, list<dag> pattern>
     : MovsucatorInst<outs, ins, asmstr, pattern> {
   let Inst{31-26} = opcode;
+  let Inst{25-0} = 0;  // Reserved for operand encoding
 }
-
-// Basic MOV instruction format
-def MOV_rr : MovFormat<0b000000,
-  (outs GPR:$dst),
-  (ins GPR:$src),
-  "mov $dst, $src",
-  [(set GPR:$dst, GPR:$src)]>;
-
-// MOV immediate format
-def MOV_ri : MovFormat<0b000001,
-  (outs GPR:$dst),
-  (ins i32imm:$imm),
-  "mov $dst, $imm",
-  [(set GPR:$dst, imm:$imm)]>;
-
-// MOV memory load format
-def MOV_rm : MovFormat<0b000010,
-  (outs GPR:$dst),
-  (ins mem:$src),
-  "mov $dst, [$src]",
-  [(set GPR:$dst, (load addr:$src))]>;
-
-// MOV memory store format
-def MOV_mr : MovFormat<0b000011,
-  (outs),
-  (ins mem:$dst, GPR:$src),
-  "mov [$dst], $src",
-  [(store GPR:$src, addr:$dst)]>;
