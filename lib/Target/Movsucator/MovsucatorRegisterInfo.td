@@ -1,6 +1,9 @@
 //===-- MovsucatorRegisterInfo.td - Register definitions --*- tablegen -*-===//
 
 include "llvm/Target/Target.td"
+include "llvm/Target/GlobalISel/RegisterBank.td"
+include "llvm/CodeGen/ValueTypes.td"
+include "llvm/IR/CallingConv.td"
 
 // Register definitions
 class MovsucatorReg<string n> : Register<n> {
