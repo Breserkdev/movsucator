@@ -91,7 +91,7 @@ if [ "$BUILD_LLVM" = true ]; then
     cmake ../llvm \
         -G Ninja \
         -DLLVM_ENABLE_PROJECTS="clang" \
-        -DLLVM_TARGETS_TO_BUILD="X86" \
+        -DLLVM_TARGETS_TO_BUILD="X86;Movsucator" \
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DLLVM_ENABLE_ASSERTIONS=${ENABLE_ASSERTIONS} \
         -DLLVM_ENABLE_RTTI=ON \
@@ -111,14 +111,15 @@ if [ "$BUILD_TARGET" = true ]; then
     mkdir -p build
     cd build
     
-    # Enable building with PIC by default
+    # Enable building with PIC by default and add LLVM source include path
     cmake .. \
         -G Ninja \
         -DLLVM_DIR="${LLVM_BUILD_DIR}/lib/cmake/llvm" \
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DLLVM_ENABLE_ASSERTIONS=${ENABLE_ASSERTIONS} \
         -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+        -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+        -DLLVM_MAIN_INCLUDE_DIR="${LLVM_DIR}/llvm/include"
     
     ninja
     cd ..

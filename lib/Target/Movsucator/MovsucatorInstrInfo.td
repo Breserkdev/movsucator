@@ -1,30 +1,26 @@
 //===-- MovsucatorInstrInfo.td - Instruction information -*- tablegen -*-===//
 
-include "MovsucatorInstrFormats.td"
+//===----------------------------------------------------------------------===//
+// Instruction Definitions
+//===----------------------------------------------------------------------===//
 
-// Memory operand definitions
-def addr : Operand<iPTR>;
-def memop : Operand<i32>;
-
-// Define instruction classes
+// Basic register-to-register MOV
 def MOV_rr : MovFormat<0b000000,
   (outs GPR:$dst), (ins GPR:$src),
   "mov $dst, $src",
-  [(set GPR:$dst, GPR:$src)]> {
-}
+  [(set GPR:$dst, GPR:$src)]>;
 
-// Special MOV instructions for handling memory operations
+// Memory load MOV
 def MOV_rm : MovFormat<0b000010,
   (outs GPR:$dst), (ins addr:$src),
   "mov $dst, [$src]",
-  [(set GPR:$dst, (load iPTR:$src))]> {
-}
+  [(set GPR:$dst, (load iPTR:$src))]>;
 
+// Memory store MOV
 def MOV_mr : MovFormat<0b000011,
   (outs), (ins addr:$dst, GPR:$src),
   "mov [$dst], $src",
-  [(store GPR:$src, iPTR:$dst)]> {
-}
+  [(store GPR:$src, iPTR:$dst)]>;
 
 // Immediate MOV instruction
 def MOV_ri : MovFormat<0b000001,

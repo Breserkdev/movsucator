@@ -1,23 +1,32 @@
 //===-- Movsucator.td - Describe the Movsucator Target Machine -*- tablegen -*-===//
 
 //===----------------------------------------------------------------------===//
-// Target-independent interfaces which we are implementing
+// Target-independent interfaces
 //===----------------------------------------------------------------------===//
 
 // Include the common target definitions that all targets need
 include "llvm/Target/Target.td"
 
 //===----------------------------------------------------------------------===//
-// Register definitions
+// Target Description
 //===----------------------------------------------------------------------===//
 
+// Include our target-specific files
+include "MovsucatorBase.td"
 include "MovsucatorRegisterInfo.td"
+include "MovsucatorInstrFormats.td"
 
 //===----------------------------------------------------------------------===//
-// Instruction definitions
+// Target Configuration
 //===----------------------------------------------------------------------===//
 
-include "MovsucatorInstrInfo.td"
+def MovsucatorInstrInfo : InstrInfo {
+  let guessInstructionProperties = 0;
+}
+
+def MovsucatorAsmParser : AsmParser {
+  let ShouldEmitMatchRegisterAltName = 1;
+}
 
 //===----------------------------------------------------------------------===//
 // Target Declaration

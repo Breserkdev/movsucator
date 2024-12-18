@@ -25,6 +25,8 @@ message(STATUS "Found LLVM ${LLVM_PACKAGE_VERSION}")
 message(STATUS "Using LLVMConfig.cmake in: ${LLVM_DIR}")
 message(STATUS "Using TableGen: ${LLVM_TABLEGEN_EXE}")
 
+# Add LLVM source include directory
+include_directories(${CMAKE_SOURCE_DIR}/llvm-project/llvm/include)
 include_directories(${LLVM_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)

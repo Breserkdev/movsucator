@@ -1,9 +1,9 @@
-//===-- MovsucatorRegisterInfo.td - Register definitions --*- tablegen -*-===//
+//===-- MovsucatorRegisterInfo.td - Register definitions -*- tablegen -*-===//
 
-// We only need Target.td which will pull in all the necessary dependencies
-include "llvm/Target/Target.td"
-
+//===----------------------------------------------------------------------===//
 // Register definitions
+//===----------------------------------------------------------------------===//
+
 class MovsucatorReg<string n> : Register<n> {
   let Namespace = "Movsucator";
   let HWEncoding{3-0} = 0;
