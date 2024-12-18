@@ -9,6 +9,8 @@ Movsucator is an LLVM-based compiler targeting a MOV-only instruction set archit
 - Custom register allocation
 - Memory operation support
 - Basic calling convention implementation
+- MOV-based arithmetic operations
+- Stack frame management
 
 ## Prerequisites
 - LLVM 17.0.6
@@ -30,7 +32,10 @@ cd movsucator
 ./build.sh
 
 # Build only Movsucator (if LLVM is already built)
-./build.sh --skip-llvm
+./build.sh --target-only
+
+# Skip running tests
+./build.sh --skip-tests
 
 # Clean build
 ./build.sh --clean
@@ -49,7 +54,22 @@ movsucator/
 │           └── ...               # Other target-specific files
 ├── include/               # Public headers
 ├── test/                 # Test files
+│   └── CodeGen/
+│       └── Movsucator/   # LLVM IR test cases
 └── docs/                 # Documentation
+```
+
+## Testing
+The project includes several test cases in the `test/CodeGen/Movsucator` directory:
+- `arithmetic.ll`: Tests for MOV-based arithmetic operations
+- `memory.ll`: Tests for memory operations
+- `controlflow.ll`: Tests for control flow constructs
+
+Run tests using:
+```bash
+./build.sh --skip-llvm
+cd test/CodeGen/Movsucator
+../../../llvm-project/build/bin/llvm-lit .
 ```
 
 ## Current Status
@@ -57,15 +77,16 @@ movsucator/
 - ✅ Register definitions and classes
 - ✅ Basic MOV instruction definitions
 - ✅ Memory operations support
-- ⚠️ Frame management (in progress)
+- ✅ MOV-based arithmetic operations
+- ✅ Stack frame management
 - ⚠️ ABI implementation (in progress)
 - ⚠️ Conditional operations (planned)
 
 ## Contributing
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please read the contributing guidelines before submitting pull requests.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
 
 ## Acknowledgments
 - LLVM Team for the excellent compiler infrastructure

@@ -23,6 +23,9 @@ add_llvm_target(MovsucatorCodeGen
   MovsucatorRegisterInfo.cpp
   MovsucatorSubtarget.cpp
   MovsucatorTargetMachine.cpp
+  MovsucatorInstrLowering.cpp
+  MovsucatorExpandPseudo.cpp
+  MovsucatorPeephole.cpp
   
   DEPENDS
   MovsucatorCommonTableGen
